@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Threat } from "./Types";
 
 const useData = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Threat[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -12,14 +13,14 @@ const useData = () => {
   const API_URL = "https://otx.alienvault.com/api/v1/pulses/subscribed";
 
   const fetchData = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
-      const response = await axios.get(API_URL, {
+      const response = await axios.get<{ results: Threat[] }>(API_URL, {
         headers: { "X-OTX-API-KEY": API_KEY },
       });
 
-      console.log("big dawg data homie", response.data); 
-      setData(response.data.results || []); 
+      console.log("big dawg data homie", response.data);
+      setData(response.data.results || []);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("An unknown error has occurred");
